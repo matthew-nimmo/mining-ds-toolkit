@@ -26,6 +26,18 @@ Planned additions for this tool include:
 - integration with related toolkit components
 - links to workflows that use this tool
 
+## Planned Toolkit Entries
+
+This list will grow as the toolkit evolves.
+
+- [ ] Datamine → Parquet converter (Go + R)
+- [ ] Python runner (Go)
+- [ ] R runner (Go)
+- [ ] kNN text classifier (Go + Odin)
+- [ ] Geological block model viewer (Odin)
+- [ ] Data quality scoring dashboard
+- [ ] Predictive geometallurgy CLI example (Go)
+
 ## Philosophy
 
 The toolkit is built on:
