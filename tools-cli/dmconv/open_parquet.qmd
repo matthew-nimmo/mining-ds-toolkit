@@ -1,0 +1,27 @@
+```{r}
+library(arrow)
+```
+
+# Load single Datamine file
+
+```{r}
+#| eval: false
+df <- read_parquet("_geology.parquet")
+```
+
+```{r}
+head(df, 5)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+df %>%
+  count(ROCK) %>%
+  ggplot(aes(ROCK, n)) +
+  geom_col(fill = "#6C4F3D") +
+  theme_minimal() +
+  labs(title = "Rock Type Distribution")
+```
+

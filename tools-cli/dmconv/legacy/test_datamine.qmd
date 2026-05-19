@@ -1,0 +1,70 @@
+```{r}
+#| eval: false
+# Only need to run this once if libraries do not exist.
+install.packages("arrow")
+install.packages("renv")
+install.packages("reticulate")
+
+renv::use_python()
+reticulate::py_install(c("pandas", "pyarrow", "numpy"))
+```
+
+```{r}
+library(arrow)
+library(reticulate)
+source("read.datamine.R")
+```
+
+# Load single Datamine file
+
+```{r}
+df <- read.datamine("_geology.dm")
+```
+
+```{r}
+write_parquet(df, "_geology.parquet")
+
+# using compression
+if (codec_is_available("gzip")) {
+  write_parquet(df, "_geology.gz.parquet", compression = "gzip", compression_level = 5)
+}
+```
+
+```{r}
+df <- read_parquet("_geology.parquet")
+```
+
+# Load and Save multiple Datamine files
+
+```{r}
+lst <- list.files(pattern="*.dm")
+for (i in lst) {
+  df <- read.datamine(i, extended=FALSE)
+  out <- gsub("[.]dm", ".parquet", i)
+  write_parquet(df, out, compression = "gzip", compression_level = 5)
+  rm(df)
+}
+```
+
+# Read Parquet using Python
+
+```{r}
+reticulate::py_discover_config()
+```
+
+```{python}
+import pandas as pd
+df2 = pd.read_parquet("_geology.parquet")
+```
+
+```{r}
+py$df2
+```
+
+# Use C version
+
+```{r}
+# Will not work on Mac OS
+source("Rdmread.R")
+df <- read.dm("_geology.dm")
+```

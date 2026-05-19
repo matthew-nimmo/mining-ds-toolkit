@@ -23,4 +23,11 @@ go.work.sum
 
 # env file
 .env
+
+# Folders
+**/release/
+**/.Rproj/
+
+# Files
 .DS_Store
+.Rhistory
