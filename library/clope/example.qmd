@@ -1,0 +1,82 @@
+```
+title: "CLOPE Example"
+```
+
+Load the CLOPE R source code.
+
+```{r}
+source("clope.R")
+```
+
+# Simple example
+
+Create example data. Can start as data frame.
+
+```{r}
+basket_df <- data.frame(
+  ID = c(1,1,1,2,2,3,3,3,4,4,4,5,5),
+  Item = c("milk","bread","eggs","bread","butter","milk","bread","butter",
+           "milk","diapers","beer","bread","milk"),
+  Number =   c(1,2,1,2,1,1,1,1,2,1,2,3,1)
+)
+basket_df
+```
+
+Or a list of named numeric vectors.
+
+```{r}
+#| eval: false
+basket_list <- list(
+  c("milk"=1, "bread"=2, "eggs"=1),
+  c("bread"=2, "butter"=1),
+  c("milk"=1, "bread"=1, "butter"=1),
+  c("milk"=2, "diapers"=1, "beer"=2),
+  c("bread"=3, "milk"=1)
+)
+```
+
+Convert data to a list of named numeric vectors if it is a data frame.
+
+```{r}
+basket_items <- split(basket_df[c("Item","Number")], basket_df$ID)
+basket_list <- lapply(basket_items, \(df) {
+  x <- df$Number
+  names(x) <- df$Item
+  x
+})
+```
+
+Run CLOPE.
+
+```{r}
+clope(basket_list)
+```
+
+# Bigger example
+
+Load data.
+
+```{r}
+library(arules)
+data("Groceries")
+```
+
+Convert arules transaction data to a list of named numeric vectors.
+
+```{r}
+tx_list <- as(Groceries, "list")
+any(unlist(lapply(tx_list, duplicated))) # Check if there are any duplicates
+tx <- lapply(tx_list, \(items) {
+  count <- rep(1, length(items))
+  names(count) <- items
+  count
+})
+```
+
+Run CLOPE. This will take a while.
+
+```{r}
+tx_clust <- clope(tx)
+```
+
+Now do something with the clustered data.
