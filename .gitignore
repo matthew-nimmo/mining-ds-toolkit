@@ -31,3 +31,13 @@ go.work.sum
 # Files
 .DS_Store
 .Rhistory
+.Rproj.user
+/tools-gui/dps/.quarto
+/tools-gui/dps/_targets
+/tools-gui/dps/_targets_r
+/tools-gui/dps/data/NEQ
+tools-gui/dps/_targets.R
+tools-gui/dps/dps_shiny.html
+/tools-gui/dps/dps_shiny_files
+tools-gui/dps/output/catalogue.sqlite
+tools-gui/dps/output/catalogue.xlsx

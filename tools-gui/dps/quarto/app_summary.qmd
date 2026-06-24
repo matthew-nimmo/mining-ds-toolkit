@@ -1,0 +1,95 @@
+---
+title: "Data Profile"
+format: dashboard
+server: shiny
+theme: sandstone
+---
+
+# Summary
+
+## Row {height="20%"}
+
+### Column {height="50%"}
+
+```{r}
+value_box(
+  title = "Path:",
+  value = dps_client_files,
+  showcase = bsicons::bs_icon("folder-fill"),
+  showcase_layout = showcase_left_center(width=0.2, max_height="20px"),
+  theme = "info",
+  full_screen = FALSE,
+  fill = TRUE
+)
+```
+
+### Column {height="25%"}
+
+```{r}
+value_box(
+  title = "Total Files:",
+  value = nrow(dataset),
+  showcase = bsicons::bs_icon("file-earmark"),
+  showcase_layout = "left center",
+  theme = "info",
+  full_screen = FALSE,
+  fill = TRUE
+)
+```
+
+### Column {height="25%"}
+
+```{r}
+data_n <- nrow(dataset[dataset$data_type == "data",])
+data_pct <- signif(100 * data_n / nrow(dataset), 3)
+value_box(
+  title = "Data Files:",
+  value = paste0(data_n, " (", data_pct, "%)"),
+  showcase = bsicons::bs_icon("file-earmark-binary-fill"),
+  showcase_layout = "left center",
+  theme = "info",
+  full_screen = FALSE,
+  fill = TRUE
+)
+```
+
+## Row {height="80%"}
+
+```{r}
+#| fig.width: 5
+#| fig.height: 8
+#| title: "Count of File Types"
+
+ggplot(dataset, aes(y=reorder(file_ext, file_ext, \(x) length(x)))) +
+  geom_bar() +
+  ylab("File Extension") +
+  theme(axis.title = element_text(size=20),
+        axis.text.x = element_text(size=14, angle=90, hjust=1),
+        axis.text.y = element_text(size=14, angle=0, hjust=1))
+```
+
+```{r}
+#| fig.width: 5
+#| fig.height: 8
+#| title: "Count of Data Types"
+
+ggplot(dataset, aes(y=reorder(data_type, data_type, \(x) length(x)))) +
+  geom_bar() +
+  ylab("Data Type") +
+  theme(axis.title = element_text(size=20),
+        axis.text.x = element_text(size=14, angle=90, hjust=1),
+        axis.text.y = element_text(size=14, angle=0, hjust=1))
+```
+
+```{r}
+#| fig.width: 5
+#| fig.height: 8
+#| title: "Count of Data Class"
+
+ggplot(datafiles, aes(y=reorder(file_class, file_class, \(x) length(x)))) +
+  geom_bar() +
+  ylab("Data Type") +
+  theme(axis.title = element_text(size=20),
+        axis.text.x = element_text(size=14, angle=90, hjust=1),
+        axis.text.y = element_text(size=14, angle=0, hjust=1))
+```

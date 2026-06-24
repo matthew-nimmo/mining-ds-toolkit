@@ -1,0 +1,159 @@
+---
+title: "Data Profile Scoring (DPS)"
+subtitle: "Report"
+date: "2024-8-23"
+date-modified: "today"
+author: "Matthew Nimmo"
+format: typst
+knitr:
+  opts_chunk:
+    dev: svglite
+---
+
+```{r}
+#| include: false
+
+Sys.setenv(`_R_USE_PIPEBIND_` = TRUE)
+library(RSQLite)
+library(ggplot2)
+library(ggridges)
+library(ggradar)
+library(viridis)
+library(dplyr)
+
+# Load data from database
+con <- dbConnect(SQLite(), "./output/catalogue.sqlite")
+dataset <- dbReadTable(con, "dataset")
+datafiles <- dbReadTable(con, "datafiles")
+profile_field <- dbReadTable(con, "profile_field")
+profile_table <- dbReadTable(con, "profile_table")
+dbDisconnect(con)
+
+# Prepare data as in dashboard
+df <- dataset |>
+  dplyr::filter(data_type == "data") |>
+  dplyr::mutate(file_name = basename(file_path)) |>
+  dplyr::select(all_of(c("id","file_path","file_name","file_ext","file_size",
+                         "data_type","file_set","duplicated","include")))
+df$n <- 1:nrow(df)
+df <- merge(df, datafiles, by="id") |>
+  dplyr::filter(type != "unknwn")
+
+x <- c("accessibility", "completeness", "complexity", "consistency",
+       "metadata", "skewness", "uniqueness", "usability")
+x <- apply(df[, x], 1, mean, na.rm=TRUE)
+df$score <- x
+
+# Data path
+dqs_client_files <- "./data"
+```
+
+# Summary
+
+## Overview
+
+- **Data Path:** `r dqs_client_files`
+- **Total Files:** `r nrow(dataset)`
+- **Data Files:** `r nrow(df)` (`r signif(100 * nrow(df) / nrow(dataset), 3)`%)
+
+## File Types
+
+```{r}
+#| fig.width: 5
+#| fig.height: 8
+#| fig.cap: "Count of File Types"
+
+ggplot(dataset, aes(y=reorder(file_ext, file_ext, \(x) length(x)))) +
+  geom_bar() +
+  ylab("File Extension") +
+  theme(axis.title = element_text(size=12),
+        axis.text.x = element_text(size=10, angle=90, hjust=1),
+        axis.text.y = element_text(size=10))
+```
+
+## Data Types
+
+```{r}
+#| fig.width: 5
+#| fig.height: 8
+#| fig.cap: "Count of Data Types"
+
+ggplot(dataset, aes(y=reorder(data_type, data_type, \(x) length(x)))) +
+  geom_bar() +
+  ylab("Data Type") +
+  theme(axis.title = element_text(size=12),
+        axis.text.x = element_text(size=10, angle=90, hjust=1),
+        axis.text.y = element_text(size=10))
+```
+
+## Data Classes
+
+```{r}
+#| fig.width: 5
+#| fig.height: 8
+#| fig.cap: "Count of Data Classes"
+
+ggplot(df, aes(y=reorder(file_class, file_class, \(x) length(x)))) +
+  geom_bar() +
+  ylab("Data Class") +
+  theme(axis.title = element_text(size=12),
+        axis.text.x = element_text(size=10, angle=90, hjust=1),
+        axis.text.y = element_text(size=10))
+```
+
+# Scoring Results
+
+## Overall Score
+
+- **Mean Score:** `r signif(100 * mean(df$score, na.rm=TRUE), 3)`
+
+## Score Distribution
+
+```{r}
+#| fig.width: 6
+#| fig.height: 4
+#| fig.cap: "Distribution of Mean Scores"
+
+ggplot(df, aes(x=score)) +
+  geom_histogram(bins=20) +
+  xlab("Score") +
+  theme(axis.title = element_text(size=12),
+        axis.text = element_text(size=10))
+```
+
+## Mean Scores by Metric
+
+```{r}
+#| fig.width: 6
+#| fig.height: 6
+#| fig.cap: "Radar Plot of Mean Scores by Metric"
+
+x <- c("accessibility", "completeness", "complexity", "consistency",
+       "metadata", "skewness", "uniqueness", "usability")
+x <- sapply(df[, x], mean, na.rm=TRUE)
+x <- c(mean(x), x)
+x <- t(data.frame(score = x))
+ggradar(x, plot.extent.x.sf=1.2, plot.extent.y.sf=1.2, group.point.size=2, 
+        grid.label.size=4, axis.label.size=3)
+```
+
+## Score Distributions by Metric
+
+```{r}
+#| fig.width: 6
+#| fig.height: 6
+#| fig.cap: "Ridge Plot of Scores by Metric"
+
+x <- df[, c("accessibility","metadata","completeness",
+            "complexity","consistency","skewness","uniqueness",
+            "usability")] |>
+  stack()
+ggplot(x, aes(x=values, y=ind, fill = after_stat(x))) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis(option = "C") +
+  xlab("Score") +
+  ylab("") +
+  theme(legend.position="none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8))
+```

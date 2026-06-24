@@ -1,5 +1,0 @@
-"0","
-
-
-dqs(dqs_client_files) |>
-  dqs_export(dqs_db_file)"

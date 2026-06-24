@@ -1,0 +1,16 @@
+---
+title: "Data Profile"
+format: dashboard
+server: shiny
+theme: sandstone
+---
+
+{{< include ./quarto/run_dps.qmd >}}
+
+{{< include ./quarto/app_setup.qmd >}}
+
+{{< include ./quarto/app_summary.qmd >}}
+
+{{< include ./quarto/app_data.qmd >}}
+
+{{< include ./quarto/app_score.qmd >}}
