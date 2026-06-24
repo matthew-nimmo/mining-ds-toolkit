@@ -1,0 +1,50 @@
+"0","#| include: false"
+"0","o <- tar_outdated()"
+"1","→ reading _targets/meta/meta"
+"1","                             "
+"1","→ parsing _targets/meta/meta"
+"1","                             "
+"1","→ noting builders and branches"
+"1","                               "
+"1","→ parsing _targets/meta/meta"
+"1","                             "
+"1","→ restricting metadata records"
+"1","                               "
+"1","→ querying 3 local files in _targets/objects"
+"1","                                             "
+"0","if (length(o) > 0) {"
+"0","  tar_make()"
+"0","  tar_load(o)"
+"0","}"
+"1","→ de-duplicating _targets/meta/meta"
+"1","                                    "
+"1","→ reading _targets/meta/meta"
+"1","                             "
+"1","→ parsing _targets/meta/meta"
+"1","                             "
+"1","→ noting builders and branches"
+"1","                               "
+"1","→ parsing _targets/meta/meta"
+"1","                             "
+"1","→ restricting metadata records                               "
+"1","→ querying 3 local files in _targets/objects"
+"1","                                             "
+"1","→ reading _targets/meta/process"
+"1","                                "
+"1","→ parsing _targets/meta/process"
+"1","                                "
+"1","[90m+[39m [34mdqs_data[39m dispatched
+"
+"1","→ 3 targets [32m■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ [39m [12m 54.5s, 1+, 2-]"
+"1","                                                                 [32m✔[39m [34m[34mdqs_data[34m[39m completed [12m 53.5s, 2.64 MB]
+"
+"1","→ 3 targets [32m■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ [39m [12m 54.5s, 1+, 2-]"
+"1","→ de-duplicating _targets/meta/meta                             "
+"1","                                    "
+"1","→ 3 targets [32m■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ [39m [12m 54.5s, 1+, 2-]"
+"1","                                                                 "
+"1","[32m✔[39m ended pipeline [12m 54.6s, 1 completed, 2 skipped]
+"
+"1","There were 50 or more warnings (use warnings() to see the first 50)
+"
+"0","tar_load_everything()"

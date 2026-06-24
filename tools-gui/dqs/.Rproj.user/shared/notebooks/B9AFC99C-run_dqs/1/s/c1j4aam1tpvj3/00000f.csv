@@ -1,0 +1,32 @@
+"0","
+
+
+
+library(tarchetypes)
+
+Sys.setenv(`_R_USE_PIPEBIND_` = TRUE)
+tar_option_set(packages = c(""dplyr"",""readr"",""readxl"",""writexl"",""univariateML"",
+                            ""RSQLite"",""reticulate""))
+
+#list.files(""./r"", ""\\.R$"", full.name=TRUE) |>
+#  lapply(source)
+
+# Load order of source files important for S4.
+source_files <- list(
+  ""clope.R"",""datafile.R"",""datafile_class.R"",
+  ""datafile_csv.R"",""datafile_unkwn.R"",""datafile_xls.R"",
+  ""dataset.R"",""detect_colnames.R"",""detect_limit.R"",
+  ""detect_method.R"",""detect_rownames.R"",""detect_units.R"",
+  ""dqs.R"",""dqs_cluster.R"",""dqs_datafiles.R"",
+  ""dqs_export.R"",""dqs_extract.R"",""dqs_metadata.R"",
+  ""dqs_profile.R"",""dqs_score.R"",""encode_format.R"",
+  ""has_unit.R"",""metadata.R"",""new_score.R"",
+  ""plot_donut.R"",""profile_data.R"",""proj_list.R"",
+  ""score_accessibility.R"",""score_accuracy.R"",""score_completeness.R"",
+  ""score_complexity.R"",""score_consistency.R"",""score_coverage.R"",
+  ""score_freshness.R"",""score_metadata.R"",""score_skewness.R"",
+  ""score_uniqueness.R"",""score_usability.R"",""value_class.R"",
+  ""value_format.R""
+)
+paste0(""./r/"", source_files) |>
+  lapply(source)"

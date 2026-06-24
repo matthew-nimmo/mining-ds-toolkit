@@ -1,0 +1,137 @@
+---
+title: "Data Profile (DQS)"
+format: dashboard
+server: shiny
+theme: sandstone
+---
+
+# Data
+
+## Row
+
+### Column {width="33%"}
+
+#### Row {height="50%"}
+
+```{r}
+#| panel: input
+
+selectInput("file_class", "File Class:",
+  c("all", unique(as.character(df$file_class))), size=1, selectize=FALSE)
+uiOutput("file_name")
+uiOutput("sheet_name")
+```
+
+#### Row
+
+```{r}
+#| title: "Similar Files"
+span(verbatimTextOutput("sim_files"), style="font-size:14px")
+```
+
+### Column
+
+#### {height="25%"}
+
+```{r}
+value_box(
+  title = "Classification:",
+  value = textOutput("class"),
+  showcase = bsicons::bs_icon("file-earmark"),
+  showcase_layout = showcase_left_center(width=0.2, max_height="20px"),
+  theme = "info"
+)
+```
+
+```{r}
+textInput("filter", "Field Name Filter (Regex):", value=".*")
+checkboxInput("show_all", "Show all files", value=FALSE)
+```
+
+#### {height="75%"}
+
+```{r}
+#| title: "Profile"
+span(tableOutput("fields"), style="font-size:12px")
+```
+
+
+```{r}
+#| context: server
+
+output$file_name = renderUI({
+  if (input$file_class == "all") {
+    x <- c(unique(df$file_name))
+  } else {
+    x <- c(unique(df$file_name[df$file_class == input$file_class]))
+  }
+  selectInput("file_name", "File Name:", x, size=1, selectize=FALSE)
+})
+
+output$sheet_name = renderUI({
+  x <- c(unique(df$sheet_name[df$file_name == input$file_name]))
+  x <- ifelse(is.na(x), "none", x)
+  selectInput("sheet_name", "Sheet Name", x, size=1, selectize=FALSE)
+})
+
+idx <- reactive({
+  x <- df
+  if (input$file_name != "none") {
+    x <- x[x$file_name == input$file_name,]
+  }
+  if (input$sheet_name != "none") {
+    x <- x[x$sheet_name == input$sheet_name,]
+  }
+  n <- c(head(x$id, 1), head(x$sheet_num, 1))
+  return(n)
+})
+
+output$fields <- renderTable({
+  n <- idx()
+  if (!any(is.na(n))) {
+    if (input$show_all) {
+      x <- df[, c("file_name","id","sheet_num","sheet_name")] |>
+        merge(profile_field)
+    } else {
+      x <- profile_field[profile_field$id==n[1] & profile_field$sheet_num==n[2],]
+    }
+    x <- x[grepl(input$filter, x$field), ]
+  } else {
+    x <- NULL
+  }
+  return(x)
+})
+
+output$class <- renderText({
+  n <- idx()
+  if (!any(is.na(n))) {
+    x <- df$file_class[df$id==n[1] & df$sheet_num==n[2]]
+  } else {
+    x <- "none"
+  }
+  return(x)
+})
+
+output$sim_files <- renderText({
+  n <- idx()
+  if (!any(is.na(n))) {
+    x <- df$file_cluster[df$id==n[1] & df$sheet_num==n[2]]
+    j <- df$file_cluster == x
+    x <- df$file_path[j]
+    x <- sub(dqs_client_files, ".", x)
+    if (length(x) > 1) {
+      x <- data.frame(pathString = x) |>
+        as.Node(x)
+      x <- capture.output(print(x))
+      x <- x[-1]
+      x <- sub("^[[:digit:]]+[[:space:]]+", "", x)
+      x <- paste(x, collapse="\n")
+    } else {
+      x <- "none"
+    }
+  } else {
+    x <- "none"
+  }
+  return(x)
+})
+```

@@ -1,0 +1,90 @@
+```{r}
+#| include: false
+library(targets)
+library(tarchetypes)
+library(RSQLite)
+Sys.setenv(`_R_USE_PIPEBIND_` = TRUE)
+```
+
+```{r}
+#| include: false
+#| eval: false
+tar_unscript()
+tar_prune()
+```
+
+```{targets globals}
+#| label: globals
+#| tar_globals: true
+#| tar_interactive: false
+
+library(tarchetypes)
+
+Sys.setenv(`_R_USE_PIPEBIND_` = TRUE)
+tar_option_set(packages = c("dplyr","readr","readxl","writexl","univariateML",
+                            "RSQLite","reticulate"))
+
+#list.files("./r", "\\.R$", full.name=TRUE) |>
+#  lapply(source)
+
+# Load order of source files important for S4.
+source_files <- list(
+  "clope.R","datafile.R","datafile_class.R",
+  "datafile_csv.R","datafile_unkwn.R","datafile_xls.R",
+  "dataset.R","detect_colnames.R","detect_limit.R",
+  "detect_method.R","detect_rownames.R","detect_units.R",
+  "dqs.R","dqs_cluster.R","dqs_datafiles.R",
+  "dqs_export.R","dqs_extract.R","dqs_metadata.R",
+  "dqs_profile.R","dqs_score.R","encode_format.R",
+  "has_unit.R","metadata.R","new_score.R",
+  "plot_donut.R","profile_data.R","proj_list.R",
+  "score_accessibility.R","score_accuracy.R","score_completeness.R",
+  "score_complexity.R","score_consistency.R","score_coverage.R",
+  "score_freshness.R","score_metadata.R","score_skewness.R",
+  "score_uniqueness.R","score_usability.R","value_class.R",
+  "value_format.R"
+)
+paste0("./r/", source_files) |>
+  lapply(source)
+```
+
+```{targets}
+#| label: data_files
+#| tar_interactive: false
+list(
+  tar_target("dqs_client_files", "./data"),
+  tar_target("dqs_db_file", "./output/catalogue")
+)
+```
+
+```{targets}
+#| label: dqs_data
+#| tar_interactive: false
+#| tar_simple: true
+dqs(dqs_client_files) |>
+  dqs_export(dqs_db_file)
+```
+
+```{r}
+#| include: false
+o <- tar_outdated()
+if (length(o) > 0) {
+  tar_make()
+  tar_load(o)
+}
+tar_load_everything()
+```
+
+```{r}
+#| include: false
+#| eval: false
+con <- dbConnect(SQLite(), paste0(tar_read(dqs_db_file), ".sqlite"))
+dbListTables(con)
+
+dqs_dataset <- dbReadTable(con, "dataset")
+dqs_datafiles <- dbReadTable(con, "datafiles")
+dqs_profile_field <- dbReadTable(con, "profile_field")
+dqs_profile_table <- dbReadTable(con, "profile_table")
+
+dbDisconnect(con)
+```

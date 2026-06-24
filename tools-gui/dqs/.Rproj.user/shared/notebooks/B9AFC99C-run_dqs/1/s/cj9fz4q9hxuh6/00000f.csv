@@ -1,0 +1,6 @@
+"0","
+
+list(
+  tar_target(""dqs_client_files"", ""./data""),
+  tar_target(""dqs_db_file"", ""./output/catalogue"")
+)"
