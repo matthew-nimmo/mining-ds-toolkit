@@ -1,0 +1,179 @@
+# Fuzzy Domain Kriging examples
+
+Checking the behaviour of the legacy Excel spreadsheets and to confirm what they did.
+
+# From /legacy/2012/soft_boundary.xls (sheet: test2)
+
+```{r}
+gauss_cov <- function(nugget, sill, range) {
+  function(h) {
+    if (range == 0) {
+      return(nugget + sill)
+    }
+    e <- exp((-3*h/range))
+    gaus <- nugget + sill*e
+    return(gaus)
+  }
+}
+
+x_samples <- c(61,64,63,68,71,73,75,65)
+y_samples <- c(139,129,140,128,140,141,128,137)
+v_samples <- c(477,227,696,646,606,791,783,559)
+
+cov_func_A <- gauss_cov(0, 10, 10)
+cov_func_AB <- gauss_cov(0, 10, 3)
+cov_func_B <- gauss_cov(0, 10, 10)
+
+soft <- 10/3
+n <- length(x_samples) - 1
+
+# Compute standard Euclidean spatial distances (N x N)
+dx <- outer(x_samples, x_samples, "-")
+dy <- outer(y_samples, y_samples, "-")
+H <- sqrt(dx^2 + dy^2)
+
+# In-Out matrix
+A <- outer(c(1,1,0,0,0,0,0), c(1,1,0,0,0,0,0))
+B <- outer(c(0,0,1,1,1,1,1), c(0,0,1,1,1,1,1))
+AB <- 1-A-B
+
+# Base Spatial Covariance Matrix (K)
+K_A <- A * cov_func_A(H[1:n,1:n])^soft
+K_B <- B * cov_func_B(H[1:n,1:n])
+K_AB <- AB * cov_func_AB(H[1:n,1:n])
+K_base <- K_A + K_AB + K_B
+
+K_sys <- cbind(K_base, 1)
+K_sys <- rbind(K_sys, c(rep(1, n), 0))
+
+# Right-Hand Side Vector k (scaled by u_target)
+h_target <- sqrt((x_samples[1:n] - x_samples[n+1])^2 + (y_samples[1:n] - y_samples[n+1])^2)
+k_base <- c(cov_func_A(h_target[1:2]), cov_func_A(h_target[3:n]))
+k_sys <- c(k_base, 1)
+
+# Solve for Kriging Weights
+w_augmented <- solve(K_sys, k_sys)
+w <- w_augmented[1:n]
+
+# Compute Estimate
+estimate <- sum(w * v_samples[1:n])
+
+cat("Estimate:", round(estimate, 3), "\n")
+```
+
+# From /legacy/2012/soft_boundary.xls (sheet: test3)
+
+```{r}
+gauss_cov <- function(nugget, sill, range) {
+  function(h) {
+    if (range == 0) {
+      return(nugget + sill)
+    }
+    e <- exp((-3*h/range))
+    gaus <- nugget + sill*e
+    return(gaus)
+  }
+}
+
+x_samples <- c(61,63,64,68,71,73,75,65)
+y_samples <- c(139,140,129,128,140,141,128,137)
+v_samples <- c(477,696,227,646,606,791,783,559)
+mu <- c(1,1,1,1,1,0,0,0)
+
+cov_func <- gauss_cov(5, 5, 10)
+
+n <- length(x_samples) - 1
+
+# Compute standard Euclidean spatial distances (N x N)
+dx <- outer(x_samples, x_samples, "-")
+dy <- outer(y_samples, y_samples, "-")
+H <- sqrt(dx^2 + dy^2)
+
+# Base Spatial Covariance Matrix (K)
+K_base <- cov_func(H[1:n,1:n])
+K_u <- outer(1-mu, mu)
+diag(K_u) <- 1-mu
+
+K_sys <- cbind(K_base, 1)
+K_sys <- rbind(K_sys, c(rep(1, n), 0))
+K_inv <- solve(K_sys)
+
+KK <- -K_inv
+diag(KK) <- 0
+kk <- as.numeric(KK[1:n,1:n] %*% (1-mu[1:n]))
+for (i in 1:n+1) {
+  KK[i,1:n] <- -K_inv[i,1:n]/kk
+}
+KK[,n+1] <- 0
+diag(KK) <- 1
+K_D <- K_u * KK
+K_inv <- K_D %*% K_inv
+
+# Right-Hand Side Vector k
+h_target <- sqrt((x_samples[1:n] - x_samples[n+1])^2 + (y_samples[1:n] - y_samples[n+1])^2)
+k_base <- cov_func(h_target)
+k_sys <- c(k_base, 1)
+
+# Solve for Kriging Weights
+w_augmented <- K_inv %*% k_sys
+w <- w_augmented[1:n]
+
+# Compute Estimate
+estimate <- sum(w * v_samples[1:n])
+
+cat("Estimate:", round(estimate, 3), "\n")
+```
+
+# From /legacy/2012/soft_boundary.xls (sheet: test4)
+
+```{r}
+gauss_cov <- function(nugget, sill, range) {
+  function(h) {
+    if (range == 0) {
+      return(nugget + sill)
+    }
+    e <- exp((-3*h/range))
+    gaus <- nugget + sill*e
+    return(gaus)
+  }
+}
+
+x_samples <- c(61,63,64,68,71,73,75,65)
+y_samples <- c(139,140,129,128,140,141,128,137)
+v_samples <- c(477,696,227,646,606,791,783,559)
+mu <- c(1,1,1,1,1,0,0,0)
+
+cov_func_A <- gauss_cov(0, 10, 10)
+cov_func_AB <- gauss_cov(0, 10, 1)
+cov_func_B <- gauss_cov(0, 10, 10)
+soft <- 10
+
+n <- length(x_samples) - 1
+
+# Compute standard Euclidean spatial distances (N x N)
+dx <- outer(x_samples, x_samples, "-")
+dy <- outer(y_samples, y_samples, "-")
+H <- sqrt(dx^2 + dy^2)
+
+# Right-Hand Side Vector k
+h_target <- sqrt((x_samples[1:n] - x_samples[n+1])^2 + (y_samples[1:n] - y_samples[n+1])^2)
+k_base <- cov_func_A(h_target)
+
+# A
+K_A <- cov_func_A(H[c(1,3),c(1,3)])
+K_A <- cbind(K_A, 1)
+K_A <- rbind(K_A, c(1,1,0))
+k_A <- c(k_base[c(1,3)])
+k_A <- c(k_A, 1)
+w_A <- solve(K_A, k_A)
+e_A <- sum(v_samples[c(1,3)] * w_A[1:2])
+
+# B
+K_B <- cov_func_B(H[c(2,4:7),c(2,4:7)])
+K_B <- cbind(K_B, 1)
+K_B <- rbind(K_B, c(rep(1,5),0))
+k_B <- c(k_base[c(2,4:7)])
+k_B <- c(k_B, 1)
+w_B <- solve(K_B, k_B)
+e_B <- sum(v_samples[c(2,4:7)] * w_B[1:5])
+```

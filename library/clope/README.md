@@ -1,4 +1,4 @@
-# <Tool Name>
+# CLOPE Transaction Clustering
 
 ## Overview
 
