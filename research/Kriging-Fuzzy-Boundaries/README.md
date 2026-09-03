@@ -106,7 +106,7 @@ go cmd/jura .
 | **Variant C (Recursive Update)**| **11.68 ns/op** | Fuzzy / Soft Boundaries | Large-scale block models, real-time spatial updates & Sequential Gaussian Simulation (SGS) |
 
 * **Zero Overhead for Soft Boundaries:** Variant B proves that incorporating inverse variance penalties ($K + R$) for fuzzy domain boundaries introduces zero execution penalty over standard hard-boundary Ordinary Kriging.
-* **Massive Simulation Throughput:** Variant C leverages recursive Woodbury updates to deliver a **~46x speedup**, turning multi-hour Sequential Gaussian Simulation (SGS) runs on million-node block models into sub-minute computations.
+* **Massive Simulation Throughput:** Variant C leverages recursive Woodbury updates to deliver a **~47x speedup**, turning multi-hour Sequential Gaussian Simulation (SGS) runs on million-node block models into sub-minute computations.
 
 ### Tail Behaviour & Outlier Robustness
 
