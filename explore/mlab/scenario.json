@@ -1,0 +1,325 @@
+{
+  "project_start": "2025-01-01",
+  "discount_rate": 0.094,
+  "tasks": [
+    {
+      "id": "MINE_BLOCK_01",
+      "kind": "mining",
+      "resource": "FLEET_1",
+      "priority": 1,
+      "metric": 100000,
+      "rate": 5000,
+      "not_before": "2025-01-01",
+      "block": {
+        "pit": "Stg1",
+        "bench": 1000,
+        "grades": [
+          {
+            "code": "au",
+            "unit": "g/t",
+            "value": 1.5
+          },
+          {
+            "code": "cu",
+            "unit": "%",
+            "value": 0.25
+          },
+          {
+            "code": "as",
+            "unit": "ppm",
+            "value": 263
+          }
+        ],
+        "recovery": {
+          "as": 0.9,
+          "cu": 0.83
+        },
+        "ore": true
+      }
+    },
+    {
+      "id": "MINE_BLOCK_02",
+      "kind": "mining",
+      "resource": "FLEET_1",
+      "priority": 1,
+      "metric": 87500,
+      "rate": 4300,
+      "not_before": "2025-01-01",
+      "block": {
+        "pit": "Stg2",
+        "bench": 1100,
+        "grades": [
+          {
+            "code": "au",
+            "unit": "g/t",
+            "value": 1.34
+          },
+          {
+            "code": "cu",
+            "unit": "%",
+            "value": 0.5
+          },
+          {
+            "code": "as",
+            "unit": "ppm",
+            "value": 480
+          }
+        ],
+        "recovery": {
+          "as": 0.9,
+          "cu": 0.85
+        },
+        "ore": true
+      }
+    },
+    {
+      "id": "PROCESS_SP1",
+      "kind": "processing",
+      "resource": "PLANT_1",
+      "priority": 10,
+      "metric": 80000,
+      "rate": 2500,
+      "not_before": "2025-01-01",
+      "plant": {
+        "feed_source": "STOCKPILE_1",
+        "recovery": {}
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "pred": "MINE_BLOCK_01",
+      "succ": "PROCESS_SP1",
+      "kind": "finish_to_start",
+      "min_lag_days": 0
+    },
+    {
+      "pred": "MINE_BLOCK_01",
+      "succ": "MINE_BLOCK_02",
+      "kind": "finish_to_start",
+      "min_lag_days": 0
+    }
+  ],
+  "resources": [
+    {
+      "id": "FLEET_1",
+      "type": "mobile_fleet",
+      "workers": 1,
+      "capacity": {}
+    },
+    {
+      "id": "PLANT_1",
+      "type": "plant",
+      "workers": 1,
+      "capacity": {}
+    }
+  ],
+  "stockpiles": [
+    {
+      "id": "STOCKPILE_1",
+      "initial_tonnes": 0,
+      "max_tonnage": 45300,
+      "blending_method": "tonnage_weighted"
+    }
+  ],
+  "price_deck": [
+    {
+      "date": "2025-01-01",
+      "prices": {
+        "ag": 55,
+        "au": 4300,
+        "cu": 1750
+      }
+    }
+  ],
+  "cost_model": {
+    "mining_cost_per_tonne": 2.1,
+    "processing_cost_per_tonne": 6.5,
+    "haul_cost_per_tonne_km": 0.15,
+    "fixed_plant_cost_per_day": 50000
+  },
+  "parameter_meta": {
+    "grade:as": {
+      "key": "grade:as",
+      "category": "grade",
+      "name": "as",
+      "unit": "ppm",
+      "type": "float",
+      "default": 320,
+      "min": 54,
+      "max": 780,
+      "description": "Arsenic grade"
+    },
+    "grade:au": {
+      "key": "grade:au",
+      "category": "grade",
+      "name": "au",
+      "unit": "g/t",
+      "type": "float",
+      "default": 0.5,
+      "min": 0,
+      "max": 100,
+      "description": "Gold grade"
+    },
+    "grade:cu": {
+      "key": "grade:cu",
+      "category": "grade",
+      "name": "cu",
+      "unit": "%",
+      "type": "float",
+      "default": 1.32,
+      "min": 0,
+      "max": 100,
+      "description": "Copper grade in percent"
+    },
+    "option:gravity_circuit": {
+      "key": "option:gravity_circuit",
+      "category": "option",
+      "name": "gravity_circuit",
+      "unit": "bool",
+      "type": "bool",
+      "default": 0,
+      "min": 0,
+      "max": 0,
+      "description": "Enable gravity circuit"
+    },
+    "param:fleet_rate_multiplier": {
+      "key": "param:fleet_rate_multiplier",
+      "category": "param",
+      "name": "fleet_rate_multiplier",
+      "unit": "ratio",
+      "type": "float",
+      "default": 0.93,
+      "min": 0.5,
+      "max": 2,
+      "description": "Fleet rate multiplier"
+    },
+    "param:gravity_recovery_boost_au": {
+      "key": "param:gravity_recovery_boost_au",
+      "category": "param",
+      "name": "gravity_recovery_boost_au",
+      "unit": "frac",
+      "type": "float",
+      "default": 0.1,
+      "min": 0,
+      "max": 0.5,
+      "description": "Additional Au recovery on split"
+    },
+    "param:gravity_split_fraction": {
+      "key": "param:gravity_split_fraction",
+      "category": "param",
+      "name": "gravity_split_fraction",
+      "unit": "frac",
+      "type": "float",
+      "default": 0.1,
+      "min": 0,
+      "max": 0.5,
+      "description": "Fraction of feed to gravity"
+    },
+    "penalty:as_rate": {
+      "key": "penalty:as_rate",
+      "category": "penalty",
+      "name": "as_rate",
+      "unit": "$AUD/t",
+      "type": "float",
+      "default": 48,
+      "min": 23,
+      "max": 1000,
+      "description": "Arsenic penalty per tonne"
+    },
+    "penalty:as_threshold": {
+      "key": "penalty:as_threshold",
+      "category": "penalty",
+      "name": "as_threshold",
+      "unit": "ppm",
+      "type": "float",
+      "default": 200,
+      "min": 50,
+      "max": 10000,
+      "description": "Arsenic penalty threshold"
+    },
+    "price:au": {
+      "key": "price:au",
+      "category": "price",
+      "name": "au",
+      "unit": "$AUD/t",
+      "type": "float",
+      "default": 4300,
+      "min": 3600,
+      "max": 5200,
+      "description": "Gold price in AUD per tonne"
+    },
+    "price:cu": {
+      "key": "price:cu",
+      "category": "price",
+      "name": "cu",
+      "unit": "$AUD/t",
+      "type": "float",
+      "default": 1750,
+      "min": 1500,
+      "max": 2200,
+      "description": "Copper price in AUD per tonne"
+    },
+    "recovery:as": {
+      "key": "recovery:as",
+      "category": "recovery",
+      "name": "as",
+      "unit": "%",
+      "type": "float",
+      "default": 0.65,
+      "min": 0.45,
+      "max": 0.98,
+      "description": ""
+    },
+    "recovery:cu": {
+      "key": "recovery:cu",
+      "category": "recovery",
+      "name": "cu",
+      "unit": "%",
+      "type": "float",
+      "default": 0.9,
+      "min": 0.67,
+      "max": 0.97,
+      "description": "Cu recovery"
+    }
+  },
+  "options": {
+    "flags": {
+      "gravity_circuit": true
+    },
+    "params": {
+      "gravity_recovery_boost_au": 0.1,
+      "gravity_split_fraction": 0.1
+    }
+  },
+  "penalties": [
+    {
+      "element_code": "as",
+      "unit": "ppm",
+      "type": "cost_per_tonne",
+      "threshold": 200,
+      "rate": 50
+    },
+    {
+      "element_code": "cu",
+      "unit": "%",
+      "type": "value_discount",
+      "threshold": 20,
+      "rate": 0.05
+    },
+    {
+      "element_code": "sb",
+      "unit": "ppm",
+      "type": "cost_per_tonne",
+      "threshold": 500,
+      "rate": 30
+    },
+    {
+      "element_code": "sb",
+      "unit": "%",
+      "type": "value_discount",
+      "threshold": 1.5,
+      "rate": 0.02
+    }
+  ]
+}

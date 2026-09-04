@@ -1,0 +1,112 @@
+---
+title: "Restricted Boltzman Machine"
+author: "Matthew Nimmo"
+date: "2024/02/05"
+date-format: "DD MMM YYYY"
+---
+
+# The Challenge  
+
+
+
+# The Solution
+
+The Restricted Boltzmann Machine (RBM) addresses the challenge of modelling high-dimensional, correlated data and identifying latent patterns without labelled examples. Traditional supervised methods struggle to capture complex dependencies when training data is scarce or unlabelled, while unsupervised approaches often lack interpretability. RBMs excel in feature extraction, data compression, and probabilistic modelling by learning relationships between binary visible (input) and hidden (latent) units.
+
+A company wants to predict customer churn but has only historical purchase logs without explicit "churn" labels. The RBM learns co-occurrence patterns across variables like frequency of login, time between purchases, and device type. Hidden units cluster these behaviours into latent factors (e.g., "loyal users," "price-sensitive shoppers"), enabling the model to infer churn risk by mapping input data to hidden representations trained on unlabelled historical activity. This reduces reliance on manual feature engineering and handles sparsity in large datasets effectively.
+
+The solution leverages RBMs' ability to capture nonlinear relationships and unlearn redundancy through energy-based modelling, making them ideal for unsupervised tasks like clustering, dimensionality reduction, and generative data synthesis.
+
+The Restricted Boltzmann Machine (RBM) is a type of unsupervised artificial neural network that can be trained using greedy stochastic learning or backpropagation. It consists of two sets of units: a visible layer and a hidden layer, which are connected by simple sigmoidal functions. Key structural restrictions prevent direct connections between any pair of nodes within the same layer (no intra-layer edges), only inter-layer connections (visible-to-hidden and vice versa). This architecture defines it as an energy-based model, where the probability distribution of data is defined by the minimum energy state (Boltzmann distribution) of the network. RBMs were instrumental in revolutionizing deep learning before being superseded by deep belief networks and other architectures, but remain foundational for generative modeling due to their ability to learn high-dimensional data representations efficiently.
+
+## How the Restricted Boltzman Machine (RBM) solves the challenge.
+
+The Restricted Boltzmann Machine (RBM) addresses the lack of labelled data in unsupervised tasks by learning internal representations directly from observed data. By capturing complex patterns through its energy function, RBMs can:
+*   Perform clustering by grouping similar high-dimensional data points into hidden unit configurations.
+*   Conduct dimensionality reduction via principal component analysis-like mechanisms within the latent space.
+*   Enable generative data synthesis, allowing the network to sample new data points from the learned probability distribution, which is critical for tasks like image restoration and natural language generation.
+
+By modelling energy distributions rather than mapping inputs directly to labels, RBMs bridge the gap between raw observations and abstract features without explicit supervision, making them ideal for exploratory data analysis and generative synthesis where ground truth labels are unavailable or too costly to obtain.
+
+### Restricted Boltzmann Machine Application to Unsupervised Generative Tasks
+
+The Restricted Boltzmann Machine (RBM) resolves the challenge of performing unsupervised learning and generative synthesis without ground truth labels by leveraging its architecture as an energy-based probabilistic model. Unlike supervised models that minimize classification error, RBMs are trained to approximate the underlying joint probability distribution $P(X, H)$ of data $X$ and hidden units $H$. This is achieved through a stochastic, contrastive learning process where visible units represent observed features while hidden units capture latent structures.
+
+The core solution lies in its generative capability. By optimizing the weights between layers to maximize the likelihood of reconstructed data compared to raw input noise, the RBM learns a mapping from the high-dimensional space back into itself (e.g., $x \rightarrow h \rightarrow x'$). This allows the network to:
+
+1.  **Model Complex Distributions**: It captures the probability mass function of natural data without knowing specific classes for the examples.
+2.  **Generate New Samples**: Once trained, new random inputs can be fed into the RBM to produce novel combinations of features based on the learned manifold $P(X)$.
+3.  **Feature Extraction**: Hidden units naturally serve as unsupervised feature detectors, effectively performing clustering or dimensionality reduction where no supervision signal exists.
+
+This energy-based approach enables the system to infer structure from raw data streams, making it ideal for scenarios where only partial observations are available (e.g., denoising) or future labels are computationally prohibitive to obtain.
+
+## Example
+
+### Step 1: Get the data
+
+- Select only numeric variables.
+
+- Transform the variables into the range [0, 1].
+
+```{r}
+#| echo: true
+#| code-line-numbers: false
+#| code-overflow: wrap
+
+iris_s <- as.matrix(iris[1:4])
+c_min <- apply(iris_s, 2, FUN="min")
+c_max <- apply(iris_s, 2, FUN="max")
+c_rng <- c_max - c_min
+iris_s <- sweep(iris_s, 2, FUN="-", c_min)
+iris_s <- sweep(iris_s, 2, FUN="/", c_rng)
+```
+
+### Step 2: Train the RBM
+
+```{r}
+#| echo: true
+#| code-line-numbers: false
+#| code-overflow: wrap
+library(deepnet)
+m1 <- rbm.train(iris_s, 1, numepochs=200, cd=10)
+m2 <- rbm.train(iris_s, 2, numepochs=200, cd=10)
+```
+
+### Step 3: Encode the data using the RBM
+
+```{r}
+#| echo: true
+#| code-line-numbers: false
+#| code-overflow: wrap
+set.seed(1)
+out_data1 <- rbm.up(m1, iris_s)
+out_data2 <- rbm.up(m2, iris_s)
+```
+
+### Step 4: Plot the RBM encoding
+
+```{r}
+#| echo: true
+#| code-line-numbers: false
+#| code-overflow: wrap
+#| fig.width: 5
+#| fig.height: 5
+plot(out_data1,
+     pch = 21,
+     bg = c("red","green3","blue")[unclass(iris$Species)],
+     main = "RBM Iris data")
+```
+
+```{r}
+#| echo: true
+#| code-line-numbers: false
+#| code-overflow: wrap
+#| fig.width: 5
+#| fig.height: 5
+plot(out_data2,
+     pch = 21,
+     bg = c("red","green3","blue")[unclass(iris$Species)],
+     main = "RBM Iris data")
+```
+
+## The Next Challenge

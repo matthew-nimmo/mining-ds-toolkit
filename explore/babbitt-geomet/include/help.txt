@@ -1,0 +1,20 @@
+nan - demo commandline Babbit data enrichment [Version 1 (First Contact)]
+
+For more help or to update this CLI app contact:
+
+Matthew Nimmo
+Nimmo Analytics
+Email: nimmo.analytics@outlook.com
+
+Commands:
+   help    Show information on available commands
+   pred    Enrich geological data with predictions
+   test    Create example test data set
+
+Flags:
+   -f <file name>      Filename to enrich, default = "test.csv"
+   -cu=<field name>    CU variable field name, default = "CU"
+   -x=<field name>     XC variable field name, default = "XC"
+   -y=<field name>     YC variable field name, default = "YC"
+   -z=<field name>     ZC variable field name, default = "ZC"
+   -dom=<field name>   Domain variable field name, default = "Domain"

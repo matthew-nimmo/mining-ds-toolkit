@@ -1,0 +1,36 @@
+nan - demo commandline Babbit data enrichment [Version 1 (First Contact)]
+
+Usage: nan <command> [-f <filename>] [-cu=<CU field name>]
+       [-x=<XC field name>] [-y=<YC field name>]
+       [-z=<ZC field name>] [-dom=<Domain field name>]
+
+nan is a tool for enriching geological data (drill hole data and block model). The tool runs a machine learned predictive algorithm on the data and adds additional variables.
+
+Required variables:
+- CU = Estimate of copper in percent [0, 100].
+- XC = X coordinate of sample.
+- YC = Y coordinate of sample.
+- ZC = Z coordinate of sample.
+- Domain = Interpreted mineralisation domain [0, 1].
+
+The added variables include:
+- x_umap = X coordinate of UMAP dimension reduction transformation.
+- y_umap = Y coordinate of UMAP dimension reduction transformation.
+- FE = Estimate of iron in percent.
+- S = Estimate of sulfur in percent.
+- AS = Estimate of arsenic in ppm.
+- BA = Estimate of barium in percent.
+- AL = Estimate of alumina in percent.
+- SG = Rock density in g/cm^3.
+- R_ = Latent variable representing rock unit.
+- G_ = Latent variable representing copper mineralisation grouping.
+- CU_Rec = Estimate of copper recovery in percent.
+- grp = Latent variable representing rock/material type.
+
+Example:
+
+    nan test
+    nan help
+    nan pred -file test.csv
+
+For a listing of options, use nan help.
