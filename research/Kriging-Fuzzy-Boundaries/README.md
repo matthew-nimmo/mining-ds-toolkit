@@ -101,7 +101,7 @@ go cmd/jura .
 | Method | Avg Execution Time | Boundary Handling | Primary Use Case |
 | :--- | :--- | :--- | :--- |
 | **Standard Ordinary Kriging** | ~553 ns/op | Hard Boundaries Only | Baseline comparison |
-| **Variant B (Full Inverse)** | ~570 ns/op | Fuzzy / Soft Boundaries | High-accuracy estimation with slight performance penalty over standard OK |
+| **Variant A (Full Inverse)** | ~570 ns/op | Fuzzy / Soft Boundaries | High-accuracy estimation with slight performance penalty over standard OK |
 | **Variant B (Full Inverse)** | ~558 ns/op | Fuzzy / Soft Boundaries | High-accuracy estimation with zero performance penalty over standard OK |
 | **Variant C (Recursive Update)**| **11.68 ns/op** | Fuzzy / Soft Boundaries | Large-scale block models, real-time spatial updates & Sequential Gaussian Simulation (SGS) |
 
