@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MINING-DS_ECOSYSTEM</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inconsolata:wght@200..900&family=League+Spartan:wght@800&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       BRUTALIST MINIMALIST STYLESHEET (DARK THEME)
+       ========================================================================== */
+    
+    :root {
+      --radius: 6px;
+    }
+    
+    :root {
+      --bg: #212121;
+      --card-bg: #272727;
+      --text: #d9d9d6;
+      --text-muted: #8b929e;
+      --border: #363636;
+      --accent: #ff5500;
+      --accent-hover: #ff7733;
+      --header-bg: rgba(33, 33, 33, 0.95);
+      --font-mono: "Inconsolata", "Courier New", Courier, monospace;
+      --font-sans: "Figtree", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-serif: "Spectral", "Times New Roman", Times, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      border-bottom: 2px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      background-color: var(--header-bg);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .brand-logo span {
+      color: var(--accent);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      background-color: var(--accent);
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 28px;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .btn:hover {
+      background-color: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background-color: transparent;
+      color: var(--accent);
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      margin-bottom: 20px;
+      font-family: 'League Spartan', sans-serif;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      margin-bottom: 16px;
+      font-family: var(--font-serif);
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+    }
+
+    .tagline {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    /* Sections */
+    section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero {
+      padding: 100px 0 80px;
+    }
+
+    .hero-sub {
+      font-size: 1.25rem;
+      color: var(--text);
+      max-width: 780px;
+      margin-bottom: 32px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Grid & Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 32px;
+      overflow: hidden;
+    }
+
+    .card-accent {
+      border-radius: var(--radius);
+      border-left: 5px solid var(--accent);
+    }
+
+    .card-title {
+      font-family: var(--font-serif);
+      color: var(--text);
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+
+    /* Process Flow */
+    .phase-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      background: var(--border);
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    /* Comparison Table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 32px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background-color: var(--card-bg);
+      /*font-family: var(--font-mono);*/
+      color: var(--text);
+    }
+
+    td {
+      color: var(--text-muted);
+    }
+
+    td.highlight {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Accordion / FAQ */
+    details {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      padding: 20px;
+    }
+
+    summary {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "+";
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+
+    details[open] summary::after {
+      content: "−";
+    }
+
+    .faq-body {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-body p {
+      margin-bottom: 0;
+      font-size: 1rem;
+    }
+
+    /* CTA Card Block (Replaces Contact Form) */
+    .cta-card {
+      background-color: var(--card-bg);
+      border: 2px solid var(--accent);
+      padding: 48px 32px;
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .cta-card h3 {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .cta-card p {
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-flex">
+      <a href="https://username.github.io/" class="brand-logo">MINING-DS<span>_ECOSYSTEM</span></a>
+      <div class="header-actions">
+        <a href="https://username.github.io/#contact" class="btn btn-sm">Master Hub ➔</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="container">
+        <div class="tagline">// Explore the Problem Space. Discover the Value.</div>
+        <h1>mining-ds-toolkit</h1>
+        <p class="hero-sub">
+          This repository is part of the <strong>mining‑ds</strong> ecosystem. A growing collection of tools (CLI and GUI), code fragments, and experiments.
+          Here you will find source R and Go files as well as basic functioning tools. Some code accompanies entries in the mining-ds-vault.
+          Visit the master hub for blog posts and links to PDF reports and their source.
+        </p>
+        <div class="cta-group">
+          <a href="https://github.com/matthew-nimmo/mining-ds" class="btn">Explore the docs</a>
+          <a href="https://github.com/matthew-nimmo/mining-ds-vault" class="btn btn-outline">Explore the source</a>
+          <a href="https://github.com/matthew-nimmo/mining-ds-toolkit" class="btn btn-outline">mining-ds-toolkit</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE SPACE -->
+    <section>
+      <div class="container">
+        <div class="tagline">// A Designed Space for Thinking</div>
+        <p>The mining-ds-vault is a curated, intentional space for modern mining data science. It is built on a foundation of minimalism, clarity, reproducibility, and longevity. Every workflow, pattern, and example is crafted to be readable, portable, and architecturally sound.</p>
+        <p>This is not a collection of scripts. It is a system of thought. A way of working that emphasises structure, reasoning, and design.</p>
+      </div>
+    </section>
+
+    <!-- THE STRUCTURE -->
+    <section>
+      <div class="container">
+        <div class="tagline">// Folder Structure of repos</div>
+        <h2>The Framework</h2>
+        <p>This repository follows a five‑layer maturity model that mirrors the NA‑4DS Framework (Define, Design, Develop, Deliver) and reflects how technical capability evolves from early research to fully independent products. Each folder represents a distinct stage in this lifecycle.</p>
+        
+        <div class="card" style="text-align: center;"><h3>Research → Explore → Discover → Products</h3></div>
+
+        <div class="grid-2">
+          <div class="card">
+            <span class="phase-badge">EXPLORE - DEFINE</span>
+            <div class="card-title">RESEARCH</div>
+            <p>The research layer contains foundational thinking: domain knowledge, conceptual frameworks, feasibility analysis, and problem definition. This is where requirements, constraints, and success criteria are established.</p>
+          </div>
+
+          <div class="card">
+            <span class="phase-badge">EXPLORE - DESIGN</span>
+            <div class="card-title">EXPLORE</div>
+            <p>The explore layer is the experimental sandbox. It includes prototypes, tests, scratch notebooks, API trials, and modelling sketches. This is where specifications emerge through experimentation and reduction of uncertainty.</p>
+          </div>
+
+          <div class="card">
+            <span class="phase-badge">DISCOVER - DEVELOP</span>
+            <div class="card-title">DISCOVER</div>
+            <p>The discover layer contains polished, reusable artefacts: exemplar workflows, reusable fragments, deployment demonstrations, and narrative‑grade documents. This is where working solutions are built and validated.</p>
+          </div>
+
+          <div class="card">
+            <span class="phase-badge">DISCOVER - DELIVER</span>
+            <div class="card-title">TOOLS</div>
+            <p>The tools layer contains operational, user‑facing utilities. These include CLI and GUI tools that turn research, exploration, and discovery into practical capability. Tools are intended as a starting point for real-world use.</p>
+          </div>
+        </div>
+
+       <br><h3>But wait. What about the 5th layer?</h3><br>
+
+        <div class="card">
+          <span class="phase-badge">DEPLOY</span>
+          <div class="card-title">STAND-ALONE REPOS</div>
+          <p>The 5th layer represents tools that have matured beyond the repository and become standalone packages or applications. Examples include external libraries, services, or modules.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIRECT CTA CARD (Points directly to Master Site Contact Form) -->
+    <section id="contact-hub">
+      <div class="container">
+        <div class="tagline">// Take Action</div>
+        <div class="cta-card">
+          <h3>Ready to see the outputs?</h3>
+          <p>To read or download the PDF outputs from the selected Quarto notebooks then visit the Master Hub (mining-ds).</p>
+          <a href="https://github.com/matthew-nimmo/mining-ds" class="btn btn-block">Visit the Master Hub ➔</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Nimmo Analytics. All rights reserved. Built on brutal minimalism.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
