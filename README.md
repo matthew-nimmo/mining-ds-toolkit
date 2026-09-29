@@ -1,15 +1,23 @@
-# Mining‑ds‑toolkit — Work in Progress
+# Mining DS Toolkit
 
-This repository is part of the **mining‑ds‑toolkit**, a collection of small, focused tools designed to support real workflows in mining, geoscience, and data‑driven engineering.
+The Mining DS Toolkit provides utilities, workflows, examples, and tooling that support the broader Mining DS ecosystem.
 
-It is being developed **in public** alongside the vault.
+## Documentation & Knowledge Hub
 
-## Status
+Published content is available through the Nimmo Analytics website:
 
-This tool is a **work in progress**.
-Functionality will expand after each LinkedIn post in the series.
+➡️ https://nimmoanalytics.au/blog
 
-## Purpose
+## What is Mining DS?
+
+Mining DS is a mining data science and analytics knowledge platform focused on:
+
+- Geology
+- Geometallurgy
+- Resource Modelling
+- Processing
+- Data Engineering
+- Data Science
 
 The toolkit provides:
 - lightweight command‑line tools
@@ -17,26 +25,11 @@ The toolkit provides:
 - reproducible components that support vault workflows
 - modern implementations in Go, Odin, and R and yes even Python
 
-## Coming Next
+## Repository Purpose
 
-Planned additions for this tool include:
-- extended functionality
-- improved documentation
-- usage examples
-- integration with related toolkit components
-- links to workflows that use this tool
+This repository serves as the source code location for the toolkit.
 
-## Planned Toolkit Entries
-
-This list will grow as the toolkit evolves.
-
-- [ ] Datamine → Parquet converter (Go + R)
-- [ ] Python runner (Go)
-- [ ] R runner (Go)
-- [ ] kNN text classifier (Go + Odin)
-- [ ] Geological block model viewer (Odin)
-- [ ] Data quality scoring dashboard
-- [ ] Predictive geometallurgy CLI example (Go)
+The primary user documentation, guides, examples, and supporting content are published through the Nimmo Analytics website.
 
 ## Philosophy
 
@@ -46,4 +39,18 @@ The toolkit is built on:
 - modern engineering practices
 - sharing practical tools with the industry
 
-New tools are announced on LinkedIn as they are released.
+## License
+
+BSD 3-Clause License
+
+## Related Resources
+
+- Nimmo Analytics: https://nimmoanalytics.au
+- Mining DS Blog: https://nimmoanalytics.au/blog
+
+**The identity page for the mining-ds Hub**
+➡️ Visit https://matthew-nimmo.github.io/mining-ds/
+
+**Looking for the identity pages**
+➡️ Visit https://matthew-nimmo.github.io/mining-ds-vault/
+➡️ Visit https://matthew-nimmo.github.io/mining-ds-toolkit/
